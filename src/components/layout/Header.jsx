@@ -18,10 +18,7 @@ function Header() {
   const logout = (e) => {
     e.preventDefault();
     removeUserData();
-    const user = getUserData();
-    if (!user) {
-      navigate('/');
-    }
+    navigate('/');
   };
 
   return (
