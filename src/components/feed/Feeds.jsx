@@ -6,40 +6,20 @@ import FeedMenu from './FeedMenu';
 import CommentForm from './CommentForm';
 import styled from 'styled-components';
 import { grayBorder } from '../../styles/sharedStyles';
-import { getFeeds } from '../../api/getFeeds';
 import Separator from '../Seperator';
-import { getUserData } from '../../utils/userData';
+import useFeed from '../../hooks/useFeeds';
 
 function Feeds() {
-  const [feeds, setFeeds] = useState([]);
+  const [feeds, addComment] = useFeed();
   const [isImgReady, setImgReady] = useState(false);
   const loadedImg = useRef([]);
 
   useEffect(() => {
-    const fetchFeeds = async () => {
-      const feeds = await getFeeds();
-      if (feeds) {
-        setFeeds(feeds);
-        loadedImg.current = new Array(feeds.length).fill(false);
-      }
-    };
-    fetchFeeds();
-  }, []);
+    loadedImg.current = new Array(feeds.length).fill(false);
+  }, [feeds]);
 
   const onCommentSubmit = (id, comment) => {
-    const { id: userId } = getUserData();
-    const feedId = feeds.findIndex((feed) => feed.id === id);
-    const commentId = new Date().getTime();
-
-    setFeeds((prevFeeds) => {
-      const curFeeds = [...prevFeeds];
-      curFeeds[feedId].comment.push({
-        commentor: userId,
-        comment: comment,
-        id: commentId,
-      });
-      return curFeeds;
-    });
+    addComment(id, comment);
   };
 
   const handleLoad = (idx) => {
