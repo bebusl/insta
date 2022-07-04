@@ -1,68 +1,72 @@
 import React, { useEffect, useRef, useState } from 'react';
-import CommentList from './Comment';
-import Header from './Header';
-import Img from './Img';
-import MenuBar from './MenuBar';
-import WriteComment from './WriteComment';
+import CommentList from './Comments';
+import FeedHeader from './FeedHeader';
+import FeedImg from './FeedImg';
+import FeedMenu from './FeedMenu';
+import CommentForm from './CommentForm';
 import styled from 'styled-components';
 import { grayBorder } from '../../styles/sharedStyles';
 import { getFeeds } from '../../api/getFeeds';
 import Separator from '../Seperator';
+import { getUserData } from '../../utils/userData';
 
 function Feeds() {
   const [feeds, setFeeds] = useState([]);
-  const [isAllLoaded, setLoaded] = useState(false);
-  const loaded = useRef([]);
+  const [isImgReady, setImgReady] = useState(false);
+  const loadedImg = useRef([]);
 
   useEffect(() => {
     const fetchFeeds = async () => {
       const feeds = await getFeeds();
       if (feeds) {
         setFeeds(feeds);
-        loaded.current = new Array(feeds.length).fill(false);
+        loadedImg.current = new Array(feeds.length).fill(false);
       }
     };
     fetchFeeds();
   }, []);
 
-  const onCommentSubmit = (id, newComment) => {
-    const newComments = [...feeds];
-    const { id: userId } = JSON.parse(localStorage.getItem('userData'));
-    const commentId = newComments.findIndex((comment) => comment.id === id);
-    newComments[commentId].comment.push({
-      commentor: userId,
-      comment: newComment,
-      id: new Date().getTime(),
+  const onCommentSubmit = (id, comment) => {
+    const { id: userId } = getUserData();
+    const feedId = feeds.findIndex((feed) => feed.id === id);
+    const commentId = new Date().getTime();
+
+    setFeeds((prevFeeds) => {
+      const curFeeds = [...prevFeeds];
+      curFeeds[feedId].comment.push({
+        commentor: userId,
+        comment: comment,
+        id: commentId,
+      });
+      return curFeeds;
     });
-    setFeeds(newComments);
   };
 
   const handleLoad = (idx) => {
-    loaded.current[idx] = true;
-    if (loaded.current.every((loaded) => loaded)) {
+    loadedImg.current[idx] = true;
+
+    if (loadedImg.current.every((loaded) => loaded)) {
       setTimeout(() => {
-        setLoaded(true);
+        setImgReady(true);
       }, 1000);
     } //모든 이미지의 로딩이 완료됐다고 판단되면 1초후에 피드들을 렌더링
   };
 
   return (
     <>
-      {!isAllLoaded && <div>Loading...</div>}
-      <Wrapper hidden={!isAllLoaded}>
+      {!isImgReady && <div>Loading...</div>}
+      <Wrapper hidden={!isImgReady}>
         {feeds.map((comment, idx) => {
           const { id, author, img, like, comment: subComments } = comment;
           return (
             <Feed key={id}>
-              <Header author={author} />
-              <Img imgSrc={img} onLoad={() => handleLoad(idx)} />
-              <MenuBar like={like} />
+              <FeedHeader author={author} />
+              <FeedImg imgSrc={img} onLoad={() => handleLoad(idx)} />
+              <FeedMenu like={like} />
               <CommentList comments={subComments} />
-              <Separator></Separator>
-              <WriteComment
-                onCommentSubmit={(newComment) =>
-                  onCommentSubmit(comment.id, newComment)
-                }
+              <Separator />
+              <CommentForm
+                onCommentSubmit={(comment) => onCommentSubmit(id, comment)}
               />
             </Feed>
           );

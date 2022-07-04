@@ -12,7 +12,7 @@ export const MinimalButton = styled(Button)`
   color: #0095f6;
 `;
 
-export const LoginButton = styled(Button)`
+export const ConditionButton = styled(Button)`
   opacity: ${(props) => (props.disabled ? 0.3 : 1)};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
 `;

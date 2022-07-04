@@ -1,29 +1,27 @@
 import { useState } from 'react';
 import { validateEmail, validatePwd } from '../utils/validator';
 
-const VALID = 'VALID';
-const UNVALID = 'UNVALID';
-const EMPTY = 'EMPTY';
+export const VALID = 'VALID';
+export const INVALID = 'INVALID';
+export const EMPTY = 'EMPTY';
 
 function useLogin() {
   const [isValidEmail, setIsValidEmail] = useState(EMPTY);
   const [isValidPwd, setIsValidPwd] = useState(EMPTY);
 
-  const checkEmail = (email) => {
-    console.log('EMAIL', email);
+  const checkValidEmail = (email) => {
     if (!email) setIsValidEmail(EMPTY);
     else if (validateEmail(email)) setIsValidEmail(VALID);
-    else setIsValidEmail(UNVALID);
+    else setIsValidEmail(INVALID);
   };
 
-  const checkPwd = (pwd) => {
-    console.log('PWD', pwd);
+  const checkValidPwd = (pwd) => {
     if (!pwd) setIsValidPwd(EMPTY);
     else if (validatePwd(pwd)) setIsValidPwd(VALID);
-    else setIsValidPwd(UNVALID);
+    else setIsValidPwd(INVALID);
   };
 
-  return [isValidEmail, isValidPwd, checkEmail, checkPwd];
+  return [isValidEmail, isValidPwd, checkValidEmail, checkValidPwd];
 }
 
 export default useLogin;

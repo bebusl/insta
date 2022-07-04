@@ -3,16 +3,16 @@ import styled from 'styled-components';
 
 function Separator({ children }) {
   return (
-    <SSeparator>
+    <SeparatorWrapper>
       <div />
       {children && <p>{children}</p>}
       <div />
-    </SSeparator>
+    </SeparatorWrapper>
   );
 }
 export default Separator;
 
-const SSeparator = styled.div`
+const SeparatorWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;

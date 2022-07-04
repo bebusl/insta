@@ -9,7 +9,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { horizontalAlign } from '../../styles/sharedStyles';
 
-function MenuBar({ like = 7 }) {
+function FeedMenu({ like = 0 }) {
   return (
     <Wrapper>
       <Menu>
@@ -25,7 +25,7 @@ function MenuBar({ like = 7 }) {
   );
 }
 
-export default MenuBar;
+export default FeedMenu;
 
 const Wrapper = styled.div`
   padding: 1rem 1rem;

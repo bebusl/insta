@@ -2,22 +2,22 @@ import React from 'react';
 import { horizontalAlign } from '../../styles/sharedStyles';
 import styled from 'styled-components';
 
-function CommentList({ comments }) {
+function Comments({ comments }) {
   return (
-    <CommentWrapper>
-      {comments.map((comment) => (
-        <Comment key={comment.id}>
-          <p>{comment.commentor}</p>
-          <p>{comment.comment}</p>
+    <Wrapper>
+      {comments.map(({ id, commentor, comment }) => (
+        <Comment key={id}>
+          <p>{commentor}</p>
+          <p>{comment}</p>
         </Comment>
       ))}
-    </CommentWrapper>
+    </Wrapper>
   );
 }
 
-export default CommentList;
+export default Comments;
 
-const CommentWrapper = styled.div`
+const Wrapper = styled.div`
   padding: 0 1rem;
 `;
 

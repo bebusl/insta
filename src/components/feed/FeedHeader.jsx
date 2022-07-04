@@ -4,18 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListDots } from '@fortawesome/free-solid-svg-icons';
 import { horizontalAlign } from '../../styles/sharedStyles';
 
-function Header({ author = 'author' }) {
+function FeedHeader({ author = 'author' }) {
   return (
-    <SHeader>
+    <Wrapper>
       <p>{author}</p>
       <FontAwesomeIcon icon={faListDots}></FontAwesomeIcon>
-    </SHeader>
+    </Wrapper>
   );
 }
 
-export default Header;
+export default FeedHeader;
 
-const SHeader = styled.div`
+const Wrapper = styled.div`
   ${horizontalAlign}
   width:100%;
   padding: 1rem 1rem;

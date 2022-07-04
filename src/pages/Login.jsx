@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import throttle from '../utils/throttle';
 import useLogin from '../hooks/useLogin';
 import { authorize } from '../utils/authorize';
-import { LoginButton } from '../components/shared/Button';
+import { ConditionButton } from '../components/shared/Button';
 import { ValidationInput } from '../components/shared/Input';
 import Separator from '../components/Seperator';
 import { setUserData } from '../utils/userData';
+import { VALID, INVALID, EMPTY } from '../hooks/useLogin';
 
 function Login() {
-  const [isValidEmail, isValidPwd, checkEmail, checkPwd] = useLogin();
+  const [isValidEmail, isValidPwd, checkValidEmail, checkValidPwd] = useLogin();
   const emailRef = useRef(null);
   const pwdRef = useRef(null);
   const navigate = useNavigate();
@@ -19,11 +20,11 @@ function Login() {
   const getUserPwd = useCallback(() => pwdRef.current?.value, []);
 
   const handleIdInput = useCallback(
-    throttle(() => checkEmail(getUserEmail()), 400),
+    throttle(() => checkValidEmail(getUserEmail()), 400),
     []
   );
   const handlePwdInput = useCallback(
-    throttle(() => checkPwd(getUserPwd()), 400),
+    throttle(() => checkValidPwd(getUserPwd()), 400),
     []
   );
 
@@ -45,7 +46,7 @@ function Login() {
           id="email"
           placeholder="전화번호, 사용자 이름 또는 이메일"
           onInput={handleIdInput}
-          warning={isValidEmail === 'UNVALID'}
+          warning={isValidEmail === INVALID}
           ref={emailRef}
         />
         <ValidationInput
@@ -53,15 +54,15 @@ function Login() {
           type="password"
           placeholder="비밀번호"
           onInput={handlePwdInput}
-          warning={isValidPwd === 'UNVALID'}
+          warning={isValidPwd === INVALID}
           ref={pwdRef}
         />
-        <LoginButton
+        <ConditionButton
           type="submit"
-          disabled={!(isValidEmail === 'VALID' && isValidPwd === 'VALID')}
+          disabled={!(isValidEmail === VALID && isValidPwd === VALID)}
         >
           로그인
-        </LoginButton>
+        </ConditionButton>
       </form>
       <Separator>또는</Separator>
       <p>페이스북으로 로그인</p>

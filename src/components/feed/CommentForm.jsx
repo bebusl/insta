@@ -6,7 +6,7 @@ import { horizontalAlign } from '../../styles/sharedStyles';
 import { MinimalButton } from '../shared/Button';
 import Input from '../shared/Input';
 
-function WriteComment({ onCommentSubmit }) {
+function CommentForm({ onCommentSubmit }) {
   const [comment, setComment] = useState('');
 
   const handleCommentChange = (e) => {
@@ -20,14 +20,13 @@ function WriteComment({ onCommentSubmit }) {
   };
 
   const handleKeyPress = (e) => {
-    console.log(e);
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       handleCommentSubmit(e);
     }
   };
 
   return (
-    <WriteBox>
+    <Wrapper>
       <FontAwesomeIcon icon={faSmile} size={'xl'} />
       <Input
         type="text"
@@ -41,13 +40,13 @@ function WriteComment({ onCommentSubmit }) {
       <MinimalButton type="submit" onClick={handleCommentSubmit}>
         게시
       </MinimalButton>
-    </WriteBox>
+    </Wrapper>
   );
 }
 
-export default WriteComment;
+export default CommentForm;
 
-const WriteBox = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   margin: auto 0;
   padding: 1rem 1rem;
